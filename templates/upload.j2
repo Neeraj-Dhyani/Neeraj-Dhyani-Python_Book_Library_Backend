@@ -1,0 +1,33 @@
+{% extends "index.j2" %}
+{% block content %}
+<div class="slip">
+    <div class="eyebrow">Library Intake</div>
+    <h1>Add a Book to the Shelf</h1>
+ 
+    <form action="/upload_book" method="POST" enctype="multipart/form-data">
+ 
+      <div class="field">
+        <label for="book_name">Book name</label>
+        <input type="text" id="book_name" name="book_name" placeholder="e.g. The Left Hand of Darkness" required>
+      </div>
+ 
+      <hr class="rule">
+ 
+      <div class="field">
+        <label for="book">Book file (PDF)</label>
+        <div class="dropzone" id="dropzone">
+          <span class="icon">&#128220;</span>
+          <div class="primary">Drop a PDF here or click to browse</div>
+          <div class="secondary">Accepted format: .pdf</div>
+          <div class="filename" id="filename"></div>
+          <input type="file" id="book" name="book" accept="application/pdf" required>
+        </div>
+      </div>
+ 
+      <button type="submit">Add to shelf</button>
+    </form>
+ 
+    <div class="stamp">Catalog No. &mdash;</div>
+  </div>
+
+{% endblock %}

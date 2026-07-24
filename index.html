@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   
+    </math>
+    <title>file_transport</title>
+</head>
+<body>
+    <form action="post", ></form>
+     
+    <input type="file" accept="image/*,.pdf">
+    <button type="submit">uplaod</button>
+</body>
+<script>
+    let input = document.querySelector("input")
+    let btn = document.querySelector("button")
+
+    input.addEventListener("change", (e)=>{
+       if(input.files.length == 1){
+        console.log(input.files[0])
+        for(let file of input.files){
+            console.log(file)
+            let img  = document.createElement("img")
+            img.src = URL.createObjectURL(file)
+            document.body.appendChild(img)
+        }
+    }
+    })
+</script>
+</html>

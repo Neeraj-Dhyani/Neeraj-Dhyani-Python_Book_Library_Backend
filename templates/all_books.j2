@@ -1,0 +1,23 @@
+
+{% extends "index.j2" %}
+{% block title %}
+All Books
+{% endblock %}
+
+{% block content %}
+
+    <div class="grid" id="shelfGrid">
+    {% for book in books %}
+        <div class="book">
+        <div class="cover-frame">
+            {% if book.thumbnail %}
+            <img src="{{ book.thumbnail }}" alt="{{ book.bookname }} cover" loading="lazy">
+            {% else %}
+            <div class="no-img">No cover</div>
+            {% endif %}
+        </div>
+        <h3 class="title">{{ book.bookname }}</h3>
+        </div>
+    {% endfor %}
+    </div>
+{% endblock %}

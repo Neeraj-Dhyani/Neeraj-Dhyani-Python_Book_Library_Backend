@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+  :root{
+    --ink:#1f2321;
+    --paper:#eee7d8;
+    --shelf-dark:#463523;
+    --brass:#a9822f;
+    --brass-bright:#c79a3f;
+    --card:#faf6ea;
+    --card-line:#d8cfb4;
+    --muted:#7a7264;
+    --error:#a3402f;
+  }
+ 
+  *{ box-sizing:border-box; }
+ 
+  body{
+    margin:0;
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:var(--shelf-dark);
+    font-family:"Iowan Old Style","Georgia",serif;
+    color:var(--ink);
+    padding:32px 16px;
+  }
+ 
+  .slip{
+    width:100%;
+    max-width:380px;
+    background:var(--card);
+    border-radius:4px;
+    padding:38px 34px 30px;
+    box-shadow:
+      0 1px 0 rgba(255,255,255,.4) inset,
+      0 18px 40px rgba(0,0,0,.4);
+    position:relative;
+  }
+ 
+  .slip::before, .slip::after{
+    content:"";
+    position:absolute;
+    top:16px;
+    width:9px; height:9px;
+    border-radius:50%;
+    background:var(--shelf-dark);
+    box-shadow: inset 0 1px 2px rgba(0,0,0,.5);
+  }
+  .slip::before{ left:16px; }
+  .slip::after{ right:16px; }
+ 
+  .icon-badge{
+    width:46px;
+    height:46px;
+    border-radius:50%;
+    background:var(--shelf-dark);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin:0 auto 16px;
+    color:var(--brass-bright);
+    font-size:19px;
+  }
+ 
+  .eyebrow{
+    text-align:center;
+    color:var(--brass);
+    font-family:"Helvetica Neue",Arial,sans-serif;
+    font-size:10.5px;
+    letter-spacing:.28em;
+    text-transform:uppercase;
+    margin-bottom:6px;
+  }
+ 
+  h1{
+    text-align:center;
+    font-weight:400;
+    font-size:23px;
+    margin:0 0 28px;
+    color:var(--ink);
+  }
+ 
+  .field{
+    margin-bottom:20px;
+  }
+ 
+  label{
+    display:block;
+    font-family:"Helvetica Neue",Arial,sans-serif;
+    font-size:10.5px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--muted);
+    margin-bottom:8px;
+  }
+ 
+  input[type="email"], input[type="password"], input[type="text"] {
+    width:100%;
+    border:none;
+    border-bottom:1.5px solid var(--card-line);
+    background:transparent;
+    font-family:"Iowan Old Style","Georgia",serif;
+    font-size:16px;
+    color:var(--ink);
+    padding:6px 30px 8px 2px;
+    outline:none;
+    transition:border-color .2s ease;
+  }
+ 
+  input:focus{ border-bottom-color:var(--brass); }
+ 
+  .pw-field{
+    position:relative;
+  }
+ 
+  .pw-toggle{
+    position:absolute;
+    right:0;
+    bottom:9px;
+    background:none;
+    border:none;
+    padding:0;
+    cursor:pointer;
+    color:var(--muted);
+    font-size:16px;
+    line-height:1;
+    transition:color .2s ease;
+  }
+ 
+  .pw-toggle:hover{ color:var(--brass); }
+ 
+  button[type="submit"]{
+    width:100%;
+    margin-top:10px;
+    padding:13px;
+    border:none;
+    border-radius:3px;
+    background:var(--brass);
+    color:var(--card);
+    font-family:"Helvetica Neue",Arial,sans-serif;
+    font-size:12px;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    cursor:pointer;
+    transition: background .2s ease, transform .15s ease;
+  }
+ 
+  button[type="submit"]:hover{ background:var(--brass-bright); }
+  button[type="submit"]:active{ transform: translateY(1px); }
+ 
+  .stamp{
+    margin-top:20px;
+    text-align:center;
+    font-family:"Helvetica Neue",Arial,sans-serif;
+    font-size:10px;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    color:#b8ae95;
+  }
+</style>
+<body>
+    <div class="slip">
+    <div class="icon-badge"><i class="fa fa-book"></i></div>
+    <div class="eyebrow">Staff Access</div>
+    <h1>Librarian Sign In</h1>
+ 
+    <form action="/admin_login" method="POST">
+ 
+      <div class="field">
+        <label for="email">Email</label>
+        <input type="email" name="email" id="email" placeholder="you@library.org" required>
+      </div>
+ 
+      <div class="field pw-field">
+        <label for="password">Password</label>
+        <input type="password" name="password" id="password"  placeholder="password" required>
+        <button type="button" class="pw-toggle" aria-label="Show password" id="eye_button">
+          <i class="fa fa-eye-slash" id="eye"></i>
+        </button>
+      </div>
+ 
+      <button type="submit">Sign in</button>
+    </form>
+ 
+    <div class="stamp">Authorized personnel only</div>
+  </div>
+</body>
+<script>
+    let btn = document.getElementById("eye_button")
+    let password = document.getElementById("password")
+    let showpass = document.getElementById("eye")
+    let is_open = false 
+
+    btn.addEventListener("click", ()=>{
+        if(is_open){
+            showpass.className = "fa fa-eye-slash"
+            password.setAttribute('type', 'password')
+            is_open = false
+        }else{
+            showpass.className = "fa fa-eye"
+            password.setAttribute('type', 'text')
+            is_open = true
+        }
+    })
+</script>
+</html>
