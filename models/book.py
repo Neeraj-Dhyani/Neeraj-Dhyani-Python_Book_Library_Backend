@@ -21,7 +21,7 @@ class Book(db.Model):
         self.bookpdf = bookpdf
         self.thumbnail = thumbnail
     
-    def to_dect(self):
+    def to_dict(self):
         return{
             "id":self.id,
             "bookname":self.bookname,
@@ -30,6 +30,7 @@ class Book(db.Model):
             "bookpdf":self.bookpdf,
             "created_at":self.created_at
         }
+    
     def add_file(book, base_dir):
         is_folder()
 
@@ -55,6 +56,11 @@ class Book(db.Model):
     def get_books():
         all_books = db.session.query(Book).all()
         return all_books
+
+    def delete_book_by_id(id):
+        db.session.query(Book).filter(Book.id == id).delete()
+        db.session.commit()
+        return {"message":"Book Deleted Successfully!"}
     
     def creat(self):
         db.session.add(self)

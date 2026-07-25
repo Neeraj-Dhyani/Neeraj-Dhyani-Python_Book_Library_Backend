@@ -8,16 +8,25 @@
           href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-
 <nav>
-    <a href="/">Home</a>
-    <a href="/upload">Upload</a>
-    <a href="/all_books">Books</a>
+    <div class="links">
+        <a href="/">Home</a>
+        <a href="/upload">Upload</a>
+        <a href="/all_books">Books</a>
+    </div>
+    
+    <form action="/api/v1/admin/admin_logout" method="GET" style="margin:0;">
+        <button type="submit" class="logout-btn">Logout</button>
+    </form>
+    
 </nav>
 
 <hr>
 
+<main>
 {% block content %}
 {% endblock %}
+</main>
+</body>
 
 </html>

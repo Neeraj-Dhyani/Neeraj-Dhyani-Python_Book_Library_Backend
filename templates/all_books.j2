@@ -1,23 +1,44 @@
-
 {% extends "index.j2" %}
-{% block title %}
-All Books
-{% endblock %}
+{% block title %}All Books{% endblock %}
 
 {% block content %}
 
-    <div class="grid" id="shelfGrid">
-    {% for book in books %}
-        <div class="book">
-        <div class="cover-frame">
-            {% if book.thumbnail %}
-            <img src="{{ book.thumbnail }}" alt="{{ book.bookname }} cover" loading="lazy">
-            {% else %}
-            <div class="no-img">No cover</div>
-            {% endif %}
-        </div>
-        <h3 class="title">{{ book.bookname }}</h3>
-        </div>
-    {% endfor %}
+<div class="shelf-unit">
+    <div class="page-header">
+        <p class="eyebrow">The Collection</p>
+        <h1>All Books</h1>
+        <p class="hero-sub">{{ books|length }} title{{ 's' if books|length != 1 else '' }} on the shelf.</p>
     </div>
+
+    <form class="search-bar" method="GET" action="all_books">
+        <input type="text" name="q" placeholder="Search by title or author…" value="{{ request.args.get('q', '') }}">
+        <button type="submit" class="btn btn-primary">Search</button>
+    </form>
+
+    {% if books %}
+    <div class="grid" id="shelfGrid">
+        {% for book in books %}
+        <div class="book">
+            <div class="cover-frame">
+                <form class="delete-form" action="api/v1/books/delete_book/{{book.id}}">
+                    <button type="submit" class="delete-btn" title="Remove">&times;</button>
+                </form>
+                {% if book.thumbnail %}
+                <img src="api/v1/books{{ book.thumbnail }}" alt="{{ book.bookname }} cover" loading="lazy">
+                {% else %}
+                <div class="no-img">No cover</div>
+                {% endif %}
+            </div>
+            <h3 class="title">{{ book.bookname }}</h3>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <p class="eyebrow">Empty Shelf</p>
+        <p class="empty-shelf">No books found. Try a different search, or <a href="{{ url_for('upload') }}">add one</a>.</p>
+    </div>
+    {% endif %}
+</div>
+
 {% endblock %}
