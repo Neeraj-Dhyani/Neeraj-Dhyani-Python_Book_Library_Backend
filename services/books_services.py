@@ -33,9 +33,6 @@ def uplaod_file():
 
 @book_db.route("/books_data", methods=["GET"])
 def all_books():
-    token = cookie_auth()
-    if token.get("message"):
-        return token["message"]
     try:
         data = Book.get_books()
         return jsonify({"books":[book.to_dict() for book in data]}), 200
