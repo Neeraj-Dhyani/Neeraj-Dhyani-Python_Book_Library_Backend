@@ -1,4 +1,5 @@
 from flask import Flask
+from flask_cors import CORS
 from dataBase import connect_db
 from services.user_service import user_db
 from services.books_services import book_db
@@ -8,6 +9,8 @@ import os
 
 version = "v1"
 app = Flask(__name__)
+
+CORS(app, origins=["http://localhost:5173"])
 
 connect_db(app)
 
