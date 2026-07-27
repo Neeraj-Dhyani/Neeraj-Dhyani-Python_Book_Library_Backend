@@ -1,7 +1,7 @@
 from dataBase import db
 import uuid
 from werkzeug.security import check_password_hash
-import datetime
+from datetime import datetime, timezone
 
 
 class User(db.Model):
@@ -14,17 +14,16 @@ class User(db.Model):
     phone =db.Column(db.String(10),nullable=False)
     address = db.Column(db.String(200), nullable=False)
     books = db.Column(db.JSON)
-    created_at = db.Column(db.String(500), default=datetime.datetime.now())
+    created_at = db.Column(db.DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
     
 
-    def __init__(self, fullname, email, password, phone, address, books, created_at):
+    def __init__(self, fullname, email, password, phone, address, books):
         self.fullname = fullname
         self.email = email
         self.password = password
         self.phone = phone
         self.address = address
         self.books = books or []
-        self.created_at = created_at
     
     def to_dict(self):
        return {
