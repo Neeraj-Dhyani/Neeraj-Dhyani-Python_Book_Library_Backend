@@ -2,6 +2,9 @@ from models.user import User
 from flask import Blueprint, jsonify, request
 from werkzeug.security import generate_password_hash
 from middleware.auth_middleware import authenticate
+from helper.sqlite import set_otp
+from helper.service import gen_otp
+from helper.mail_sender import send_mail
 import jwt 
 import os
 
@@ -100,7 +103,7 @@ def update_user():
 
 @user_db.route("/user_delete", methods=["DELETE"])
 def user_delete():
-    data = authenticate
+    data = authenticate()
     if data.get("message"):
         return jsonify({"status":401, "message":data["message"]})
     try:
@@ -109,7 +112,47 @@ def user_delete():
     except Exception as err:
         return jsonify({"statu":500, "message":"Somthing Went Wrong!", "error":f"{err}"})
 
-             
+
+@user_db.route("/send_mail", methods=["GET"])
+def send_email():
+    aut_data = authenticate()
+    if aut_data.get("message"):
+        return jsonify({"status":401, "message":aut_data["message"]})
+    print(aut_data)
+    try:
+        data = User.get_user_by_id(aut_data["user"])
+        otp = gen_otp()
+        res = send_mail(data["user"].email, otp)
+        if(res["success"]):
+            set_otp(otp)
+            return jsonify({"message":res["message"]}), 200       
+        else:
+            return jsonify({"message":res["message"]}), 400
+    except Exception as err:
+        return jsonify({"statu":500, "message":"Somthing Went Wrong!", "error":f"{err}"})
+    
 
 
+@user_db.route("/forget_pass", methods=["PUT"])
+def forget_password():
+    aut_data = authenticate()
+    if aut_data.get("message"):
+        return jsonify({"status":401, "message":aut_data["message"]})
+    try:
+        json_data = request.get_json()
+        send_otp, newpassword = json_data["otp"], json_data["password"]
+
+        data = User.get_user_by_id(aut_data["user"])
+        hashPassoword = generate_password_hash(newpassword)
+        res = data["user"].forget_pass(hashPassoword, send_otp)
+
+        if(res["success"]):
+            return jsonify({"message":res["message"]})
+        else:
+            return jsonify({"message":res["message"]})
+
+        
+    except Exception as err:
+        return jsonify({"statu":500, "message":"Somthing Went Wrong!", "error":f"{err}"})
+        
     

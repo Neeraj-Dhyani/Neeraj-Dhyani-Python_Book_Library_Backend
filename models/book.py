@@ -58,7 +58,16 @@ class Book(db.Model):
         return all_books
 
     def delete_book_by_id(id):
-        db.session.query(Book).filter(Book.id == id).delete()
+        data = db.session.query(Book).filter(Book.id == id).first()
+        if not data:
+            return{"message":"Book not Found!"}
+        pdf_path = f"Book_PDF/{data.bookpdf}"
+        thumb_path = f"Book_PDF/{data.thumbnail}"
+        if os.path.exists(pdf_path):
+            os.remove()
+        if os.path.exists(thumb_path):
+            os.remove()
+        db.session.delete()
         db.session.commit()
         return {"message":"Book Deleted Successfully!"}
     

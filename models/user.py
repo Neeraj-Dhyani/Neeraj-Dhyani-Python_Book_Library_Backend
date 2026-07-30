@@ -2,6 +2,7 @@ from dataBase import db
 import uuid
 from werkzeug.security import check_password_hash
 from datetime import datetime, timezone
+from helper.sqlite import verify
 
 
 class User(db.Model):
@@ -108,8 +109,19 @@ class User(db.Model):
         
     def delete_user(id):
         db.session.query(User).filter(User.id == id).delete(synchronize_session=False)
+        db.session.commit()
         return {'message':"Successfully Deleted!"}
-    
+
+    def forget_pass(self, newpass, token):
+        user = db.session.query(User).filter(User.id == self.id).first()
+
+        res = verify(token)
+        if(res["valid"]):
+            user.password = newpass
+            db.session.commit()
+            return {"success":True,"message":"Password Change Successfully!"}
+        else:
+            return {"success":True,"message":res["message"]}
 
     @staticmethod
     def print_all_user():
