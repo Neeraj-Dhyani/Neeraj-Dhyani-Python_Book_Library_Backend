@@ -113,16 +113,11 @@ def user_delete():
         return jsonify({"statu":500, "message":"Somthing Went Wrong!", "error":f"{err}"})
 
 
-@user_db.route("/send_mail", methods=["GET"])
-def send_email():
-    aut_data = authenticate()
-    if aut_data.get("message"):
-        return jsonify({"status":401, "message":aut_data["message"]})
-    print(aut_data)
+@user_db.route("/send_mail/<email>", methods=["GET"])
+def send_email(email):
     try:
-        data = User.get_user_by_id(aut_data["user"])
         otp = gen_otp()
-        res = send_mail(data["user"].email, otp)
+        res = send_mail(email, otp)
         if(res["success"]):
             set_otp(otp)
             return jsonify({"message":res["message"]}), 200       
