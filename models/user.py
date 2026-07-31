@@ -119,9 +119,9 @@ class User(db.Model):
         else:
             return {"success":True, "user_email":user_email.email}
 
-    def forget_pass(self, newpass, token):
-        user = db.session.query(User).filter(User.id == self.id).first()
-
+    def forget_pass(email, newpass, token):
+        
+        user = db.session.query(User).filter(User.email == email).first()
         res = verify(token)
         if(res["valid"]):
             user.password = newpass
@@ -129,6 +129,9 @@ class User(db.Model):
             return {"success":True,"message":"Password Change Successfully!"}
         else:
             return {"success":True,"message":res["message"]}
+
+
+    
 
     @staticmethod
     def print_all_user():

@@ -133,17 +133,14 @@ def send_email(email):
 
 @user_db.route("/forget_pass", methods=["PUT"])
 def forget_password():
-    aut_data = authenticate()
-    if aut_data.get("message"):
-        return jsonify({ "message":aut_data["message"]}), 401
     try:
+        
         json_data = request.get_json()
-        send_otp, newpassword = json_data["otp"], json_data["password"]
+        send_otp, newpassword, email = json_data["otp"], json_data["password"], json_data["email"]
 
-        data = User.get_user_by_id(aut_data["user"])
         hashPassoword = generate_password_hash(newpassword)
-        res = data["user"].forget_pass(hashPassoword, send_otp)
-
+        res = User.forget_pass(email, hashPassoword, send_otp)
+        
         if(res["success"]):
             return jsonify({"message":res["message"]})
         else:
