@@ -112,6 +112,13 @@ class User(db.Model):
         db.session.commit()
         return {'message':"Successfully Deleted!"}
 
+    def find_email(email):
+        user_email  = db.session.query(User).filter(User.email == email).first()
+        if not user_email:
+            return {"success":False,}
+        else:
+            return {"success":True, "user_email":user_email.email}
+
     def forget_pass(self, newpass, token):
         user = db.session.query(User).filter(User.id == self.id).first()
 
