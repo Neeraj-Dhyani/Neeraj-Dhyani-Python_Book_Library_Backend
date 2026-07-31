@@ -120,7 +120,6 @@ class User(db.Model):
             return {"success":True, "user_email":user_email.email}
 
     def forget_pass(email, newpass, token):
-        
         user = db.session.query(User).filter(User.email == email).first()
         res = verify(token)
         if(res["valid"]):
