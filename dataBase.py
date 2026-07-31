@@ -20,8 +20,10 @@ def connect_db(app):
     app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {
         "pool_pre_ping": True,
         "pool_recycle": 300,
-        "ssl":{
-            "ca":"certs/ca.pem"
+        "connect_args": {
+            "ssl":{
+                "ca":"certs/ca.pem"
+            }
         }
     }
 
