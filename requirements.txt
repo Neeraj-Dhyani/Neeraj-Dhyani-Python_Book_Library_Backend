@@ -25,6 +25,7 @@ PyMySQL==1.2.0
 python-dotenv==1.2.2
 pywin32-ctypes==0.2.3
 requests==2.34.2
+resend==2.35.0
 setuptools==83.0.0
 SQLAlchemy==2.0.51
 typing-inspection==0.4.2
