@@ -5,6 +5,7 @@ from middleware.auth_middleware import authenticate
 from helper.sqlite import set_otp
 from helper.service import gen_otp
 from helper.mail_sender import send_mail
+import socket
 import jwt 
 import os
 
@@ -152,3 +153,16 @@ def forget_password():
         return jsonify({ "message":"Somthing Went Wrong!", "error":f"{err}"}), 500
         
     
+@user_db.route('/net_test', methods=['GET'])
+def test_network():
+    try:
+        ip = socket.gethostbyname("smtp.gmail.com")
+        return jsonify({
+            "success":True,
+            "ip":ip
+        })
+    except Exception as err:
+        return jsonify({
+            "success":False,
+            "error":err
+        })
