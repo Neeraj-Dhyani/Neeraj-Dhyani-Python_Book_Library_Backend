@@ -9,7 +9,7 @@ load_dotenv()
 def send_mail(user_email, otp):
     sender_mail = os.getenv("EMAIL")
     send_pass = os.getenv("APP_PASSWORD")
-    print(sender_mail, send_pass)
+    # print(sender_mail, send_pass)
     SMTP_SERVER = "smtp.gmail.com"
     SMTP_PORT = 587
    
@@ -30,7 +30,12 @@ def send_mail(user_email, otp):
             server.login(sender_mail, send_pass)
             server.send_message(message)
             return {"success":True,"message":"Email Sent Successfully"}
-    except Exception as e:
-        return {"error": e}
+    except Exception as err:
+        import traceback
+        traceback.print_exc()
 
+        return {
+            "success": False,
+            "message": str(err)
+        }
 # send_mail()
