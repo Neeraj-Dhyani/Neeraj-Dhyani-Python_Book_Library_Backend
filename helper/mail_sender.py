@@ -11,7 +11,7 @@ def send_mail(user_email, otp):
     send_pass = os.getenv("APP_PASSWORD")
     # print(sender_mail, send_pass)
     SMTP_SERVER = "smtp.gmail.com"
-    SMTP_PORT = 587
+    SMTP_PORT = 465
    
     message = EmailMessage()
     message["subject"] = "Your Token!"
