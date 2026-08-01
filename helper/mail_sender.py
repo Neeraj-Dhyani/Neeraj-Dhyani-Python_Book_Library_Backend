@@ -1,41 +1,24 @@
-import smtplib
-from email.message import EmailMessage
-from dotenv import load_dotenv
 import os
+import resend
 
-load_dotenv()
+sender_email = os.getenv("EMAIL")
+resend.api_key = os.getenv("RESEND_API_KEY")
 
     
 def send_mail(user_email, otp):
-    sender_mail = os.getenv("EMAIL")
-    send_pass = os.getenv("APP_PASSWORD")
-    # print(sender_mail, send_pass)
-    SMTP_SERVER = "smtp.gmail.com"
-    SMTP_PORT = 465
-   
-    message = EmailMessage()
-    message["subject"] = "Your Token!"
-    message["from"] = sender_mail
-    message["to"] = user_email
-    message.set_content(f"""
-                    Your OTP is: {otp}
-                    Copy this code to verify your account.
-                    """)
-
+    print(sender_email)
     try:
-        with smtplib.SMTP(SMTP_SERVER, SMTP_PORT, timeout=15) as server:
-            server.ehlo()
-            server.starttls()
-            server.ehlo()
-            server.login(sender_mail, send_pass)
-            server.send_message(message)
-            return {"success":True,"message":"Email Sent Successfully"}
+        params: resend.Emails.SendParams = {
+        "from": sender_email,
+        "to": [user_email],
+        "subject": "Your OTP!",
+        "html": f"""<strong> Your OTP is : {otp}</strong></br><p>Copy this code to verify your account</p>""",
+        }
+        email = resend.Emails.send(params)
+        return {"success":True, "message":email}
     except Exception as err:
         import traceback
         traceback.print_exc()
-
-        return {
-            "success": False,
-            "message": str(err)
-        }
+        return {"success":False, "message":str(err)}
+    
 # send_mail()

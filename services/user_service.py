@@ -153,16 +153,16 @@ def forget_password():
         return jsonify({ "message":"Somthing Went Wrong!", "error":f"{err}"}), 500
         
     
-@user_db.route('/net_test', methods=['GET'])
-def test_network():
-    try:
-        ip = socket.gethostbyname("smtp.gmail.com")
-        return jsonify({
-            "success":True,
-            "ip":ip
-        })
-    except Exception as err:
-        return jsonify({
-            "success":False,
-            "error":err
-        })
+# @user_db.route('/net_test', methods=['GET'])
+# def test_network():
+#     try:
+#         ip = socket.gethostbyname("smtp.gmail.com")
+#         return jsonify({
+#             "success":True,
+#             "ip":ip
+#         })
+#     except Exception as err:
+#         return jsonify({
+#             "success":False,
+#             "error":err
+#         })
