@@ -114,7 +114,6 @@ class User(db.Model):
 
     def find_email(email):
         user_email  = db.session.query(User).filter(User.email == email).first()
-        
         if not user_email:
             return {"success":False,}
         else:
