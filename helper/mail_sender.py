@@ -23,8 +23,10 @@ def send_mail(user_email, otp):
                     """)
 
     try:
-        with smtplib.SMTP(SMTP_SERVER, SMTP_PORT) as server:
-            server.starttls() 
+        with smtplib.SMTP(SMTP_SERVER, SMTP_PORT, timeout=15) as server:
+            server.ehlo()
+            server.starttls()
+            server.ehlo()
             server.login(sender_mail, send_pass)
             server.send_message(message)
             return {"success":True,"message":"Email Sent Successfully"}
