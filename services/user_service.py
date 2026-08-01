@@ -115,19 +115,21 @@ def user_delete():
 
 @user_db.route("/send_mail/<email>", methods=["GET"])
 def send_email(email):
-    try:
-        user_email= User.find_email(email)
-        if not user_email["success"]:
-            return jsonify({"message":"Email not Found!"}), 404
-        otp = gen_otp()
-        res = send_mail(user_email["user_email"], otp)
-        if(res["success"]):
-            set_otp(otp)
-            return jsonify({"message":res["message"]}), 200       
-        else:
-            return jsonify({"message":res["message"]}), 400
-    except Exception as err:
-        return jsonify({ "message":"Somthing Went Wrong!", "error":f"{err}"}), 500
+    return jsonify({"success":True, "email":email})
+    # try:
+    #     user_email= User.find_email(email)
+    #     if not user_email["success"]:
+    #         return jsonify({"message":"Email not Found!"}), 404
+    #     otp = gen_otp()
+    #     res = send_mail(user_email["user_email"], otp)
+    #     if(res["success"]):
+    #         set_otp(otp)
+    #         return jsonify({"message":res["message"]}), 200       
+    #     else:
+    #         return jsonify({"message":res["message"]}), 400
+    # except Exception as err:
+    #     return jsonify({ "message":"Somthing Went Wrong!", "error":f"{err}"}), 500
+    
     
 
 
@@ -140,7 +142,7 @@ def forget_password():
 
         hashPassoword = generate_password_hash(newpassword)
         res = User.forget_pass(email, hashPassoword, send_otp)
-        
+
         if(res["success"]):
             return jsonify({"message":res["message"]})
         else:
