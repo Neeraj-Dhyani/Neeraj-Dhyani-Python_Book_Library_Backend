@@ -121,7 +121,7 @@ def send_email(email):
             return jsonify({"message":"Email not Found!"}), 404
         otp = gen_otp()
         res = send_mail(user_email["user_email"], otp)
-        return jsonify({res})
+        return jsonify(res)
         # if(res["success"]):
         #     set_otp(otp)
         #     return jsonify({"message":res["message"]}), 200       
