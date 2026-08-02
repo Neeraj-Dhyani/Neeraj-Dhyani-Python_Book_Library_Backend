@@ -26,7 +26,7 @@ def creat_user():
         # print(data)
         # print(type(data))
         if(User.is_user(data["email"])):
-            return  {"status":400, "message":"User Already Exit!"}, 400
+            return  {"message":"User Already Exit!"}, 400
     
         hashPassoword = generate_password_hash(data["password"])
         print(hashPassoword)
@@ -40,7 +40,7 @@ def creat_user():
                     )
         user.create()
 
-        return jsonify({"status":200, "message":"User Created Successfully!"}), 200
+        return jsonify({"message":"User Created Successfully!"}), 200
     
     except Exception as err:
 
@@ -53,16 +53,19 @@ def user_login():
     try:
         data = request.get_json()
         email, password = data["email"], data["password"]
+        if email == '' or password=='':
+            return jsonify({"message":"Please Enter Required Field!"}), 400
+
 
         is_user = User.user_login(email, password)
 
         if is_user["valid"]:
             token = jwt.encode({"id":is_user["id"]}, os.getenv("SECRET"), algorithm="HS256")
-            return jsonify({"status":200, "message":"Login Successfuly!", "token":token}), 200
+            return jsonify({"message":"Login Successfuly!", "token":token}), 200
         else:
-            return jsonify({"status":401, "message":f"{is_user["message"]}"}), 401
+            return jsonify({"message":f"{is_user["message"]}"}), 401
 
-        
+
     except Exception as err:
         return jsonify({ "message":"Somthing Went Wrong!", "error":f"{err}"}), 500
   
@@ -71,15 +74,15 @@ def user_login():
 def user():
     data = authenticate()
     if data.get("message"):
-        return jsonify({"status":401, "message":data["message"]})
+        return jsonify({"message":data["message"]}), 401
     
     try:
         data = User.get_user_by_id(data["user"])
 
         if not data:
-            return jsonify({"status":404, "message":"User Not Found!"})
+            return jsonify({"message":"User Not Found!"}), 404
         
-        return jsonify({"statu":200, "user":data["user"].to_dict()})
+        return jsonify({ "user":data["user"].to_dict()}), 200
     
     except Exception as err:
         return jsonify({"message":"Somthing Went Wrong!", "error":f"{err}"}), 500
@@ -88,7 +91,7 @@ def user():
 def update_user():
     data = authenticate()
     if data.get("message"):
-        return jsonify({"status":401, "message":data["message"]}), 401
+        return jsonify({"message":data["message"]}), 401
     try:
         body_data = request.get_json()
         fullname, email, phone, address = body_data["fullname"], body_data["email"], body_data["phone"], body_data["address"]
@@ -97,8 +100,8 @@ def update_user():
         update = User.update_user(data["user"], fullname, phone, email, address)
         # print("user update : ",update)
         if update.get("error"):
-            return jsonify({"stuts":400, "message":update["error"]}), 400
-        return jsonify({"status":200, "update_user":update["user"].to_dict(), "message":update["message"]}), 200
+            return jsonify({ "message":update["error"]}), 400
+        return jsonify({"update_user":update["user"].to_dict(), "message":update["message"]}), 200
     except Exception as err:
         return jsonify({ "message":"Somthing Went Wrong!", "error":f"{err}"}), 500
 
@@ -106,10 +109,10 @@ def update_user():
 def user_delete():
     data = authenticate()
     if data.get("message"):
-        return jsonify({"status":401, "message":data["message"]}), 401
+        return jsonify({"message":data["message"]}), 401
     try:
         data_user = User.delete_user(data["user"])
-        return{"status":200, "message":data_user["message"]}
+        return{ "message":data_user["message"]}, 200
     except Exception as err:
         return jsonify({ "message":"Somthing Went Wrong!", "error":f"{err}"}), 500
 
