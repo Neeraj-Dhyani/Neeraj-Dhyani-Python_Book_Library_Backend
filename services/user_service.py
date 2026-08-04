@@ -56,7 +56,6 @@ def user_login():
         if email == '' or password=='':
             return jsonify({"message":"Please Enter Required Field!"}), 400
 
-
         is_user = User.user_login(email, password)
 
         if is_user["valid"]:

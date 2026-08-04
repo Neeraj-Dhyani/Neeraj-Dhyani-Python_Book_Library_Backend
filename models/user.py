@@ -130,8 +130,6 @@ class User(db.Model):
             return {"success":True,"message":res["message"]}
 
 
-    
-
     @staticmethod
     def print_all_user():
         user_data = User.query.all()

@@ -39,6 +39,18 @@ def all_books():
     except Exception as err:
         return jsonify({"statu":500, "message":"Somthing Went Wrong!", "error":f"{err}"})
 
+@book_db.route("book_pegination")
+def pagination():
+    try:
+        offset = request.args.get("page", 1, type=int)
+        limit = request.args.get("limit", 5, type=int)
+        books = Book.Book_pegination(offset, limit)
+
+        return jsonify({"data":books}), 200
+    except Exception as err:
+        return jsonify({"message":"Somthing Went Wrong!", "error":f"{err}"}), 500
+
+
 @book_db.route("/delete_book/<book_id>", methods=["DELETE"])
 def delete_books(book_id):
     token = cookie_auth()
@@ -57,4 +69,18 @@ def get_book(filename):
 
 @book_db.route("/media/thumbnail/<filename>")
 def get_thumbnail(filename):
-    return send_from_directory(os.path.join(base_dir, "Book_PDF", "Thumbnails"), filename)
+    return send_from_directory(os.path.join(base_dir, "Book_PDF", "Thumbnails"), filename)\
+    
+@book_db.route('/search')
+def sereach():
+    try:
+        search_value = request.args.get("value", type=str)
+        data = Book.search(search_value)
+        if(data["success"]):
+            return jsonify({"data":data["data"].to_dict()}), 200
+        else:
+            return jsonify({"message":"No Book Found!"}), 404
+    except Exception as err:
+        return jsonify({"message":"Somthing Went Wrong!", "error":f"{err}"}), 500
+
+

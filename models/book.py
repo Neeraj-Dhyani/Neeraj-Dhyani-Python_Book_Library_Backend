@@ -75,4 +75,30 @@ class Book(db.Model):
         db.session.add(self)
         db.session.commit()
         return {"message":"Book Created Successfully!"}
-    
+
+    @staticmethod
+    def Book_pegination(offset, limit):
+        # data = db.session.query(Book).offset(offset).limit(limit).all()
+        data = Book.query.paginate(page=offset, per_page=limit, error_out=False)
+        return {
+            "books":[{
+                "id":book.id,
+                "bookname":book.bookname,
+                "bookcode":book.bookcode,
+                "thumbnail":book.thumbnail,
+                "bookpdf":book.bookpdf,
+                "created_at":book.created_at
+            } for book in data.items],
+            "page":data.page,
+            "pages":data.pages,
+            "has_next":data.has_next,
+            "has_prev":data.has_prev
+        }
+
+    @staticmethod
+    def search(value):
+        data = Book.query.filter(Book.bookname == value).first()
+        if not data:
+            return {"success":False}
+        
+        return {"success":True, "data":data}
