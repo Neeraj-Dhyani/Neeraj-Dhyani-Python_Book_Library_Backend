@@ -8,7 +8,7 @@ from services.admin_auth import admin_db
 import os
 
 version = "v1"
-app = Flask(__name__)
+app = Flask(__name__, static_folder='static')
 
 CORS(app, origins=["http://localhost:5173"])
 
