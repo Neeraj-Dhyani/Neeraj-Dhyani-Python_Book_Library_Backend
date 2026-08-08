@@ -11,7 +11,7 @@ import os
 version = "v1"
 app = Flask(__name__, static_folder='static')
 
-CORS(app, origins=["http://localhost:5173", "https://netlibrary.web-craft.in"])
+CORS(app, origins=["http://localhost:5173", "https://netlibrary.web-craft.in", "https://library-frontend-react.vercel.app"])
 
 connect_db(app)
 # print(app.static_folder)
